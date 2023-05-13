@@ -1,0 +1,53 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="12">
+      <ng-container *ngIf="orderService.numProducts() === 0">
+        <ion-text class="no-products">{{'label.no.products' | translate}}</ion-text>
+      </ng-container>
+      <ng-container *ngIf="orderService.numProducts() > 0">
+        <ion-item-sliding *ngFor="let product of orderService.order.productsOrder">
+          <ion-item (click)="showDetail(product)">
+            <ion-label>{{product.name | translate}}</ion-label>
+          </ion-item>
+          <ion-card *ngIf="product.showDetail">
+            <ion-card-content>
+              <ion-item lines="none">
+                <ion-label>{{'label.quantity' | translate}}</ion-label>
+                <ion-text class="product-quantity">
+                  <ion-icon name="remove-circle-outline" (click)="orderService.order.oneLessProduct(product)"></ion-icon>
+                  {{product.quantity}}
+                  <ion-icon name="add-circle-outline" (click)="orderService.order.oneMoreProduct(product)"></ion-icon>
+                </ion-text>
+              </ion-item>
+              <ng-container *ngIf="product.extras">
+                <ng-container *ngFor="let extra of product.extras">
+                  <ng-container *ngFor="let extraProduct of extra.products">
+                    <ion-item lines="none" *ngIf="(extraProduct.options.length === 1 && extraProduct.options[0].activate)
+                      || (extraProduct.options.length > 1 && extraProduct.optionSelected)">
+                      <ng-container *ngIf="extraProduct.options.length === 1 && extraProduct.options[0].activate">
+                        {{(extraProduct.name | translate) + ' ($' + extraProduct.options[0].price + ')'}}
+                      </ng-container>
+                      <ng-container *ngIf="extraProduct.options.length > 1 && extraProduct.optionSelected">
+                        {{(extraProduct.name | translate) + ': ' + (extraProduct.optionSelected.name | translate) + ' ($' + extraProduct.optionSelected.price + ')'}}
+                      </ng-container>
+                    </ion-item>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ion-card-content>
+          </ion-card>
+          <ion-item-options side="end" *ngIf="!product.showDetail">
+            <ion-item-option color="danger" (click)="remove(product)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ng-container>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-text-center">
+      <ion-text>{{('label.total.order' | translate) + '$' + orderService.totalOrder()}}</ion-text>
+    </ion-col>
+  </ion-row>
+</ion-grid>

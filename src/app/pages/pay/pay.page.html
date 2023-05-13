@@ -1,0 +1,23 @@
+<ion-content class="ion-padding">
+  <ng-container *ngIf="!auth.isLogged">
+    <app-login *ngIf="!showNewAccount"
+    [showBack]="false"
+    (newAccount)="newAccount()">
+  </app-login>
+  <app-create-account *ngIf="showNewAccount"
+    (back)="back()">
+  </app-create-account>
+  </ng-container>
+  <ng-container *ngIf="auth.isLogged">
+    <app-list-product-order></app-list-product-order>
+    <!-- <app-mercadopago-button></app-mercadopago-button> -->
+    <ion-button id="checkout" type="button" expand="block" (click)="createOrder()" *ngIf="orderService.numProducts() > 0">
+      <ion-icon slot="start" name="logo-paypal"></ion-icon>
+      <ion-text>{{'label.pay.paypal' | translate}}</ion-text>
+    </ion-button>
+  </ng-container>
+
+  <ion-button type="button" expand="block" [routerLink]="['/categories']">
+    <ion-text>{{'label.back.home' | translate}}</ion-text>
+  </ion-button>
+</ion-content>

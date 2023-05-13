@@ -1,0 +1,57 @@
+<ion-content>
+  <ng-container *ngIf="product.extras">
+    <ion-grid>
+      <ion-row *ngFor="let extra of product.extras">
+        <ion-col size="12" *ngFor="let extraProduct of extra.products">
+          <ion-card class="product">
+            <div class="ion-text-center">
+              <img [src]="extraProduct.img"/>
+            </div>
+            <ion-card-header>
+              <ion-card-title class="extraProductName">{{extraProduct.name | translate }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ng-container *ngIf="extraProduct.options.length === 1">
+                <ion-item>
+                  <ion-checkbox slot="start" [(ngModel)]="extraProduct.options[0].activate" name="check"></ion-checkbox>
+                  <ion-text class="price-checkbox">{{'$' + (extraProduct.options[0].activate ? extraProduct.options[0].price: '0')}}</ion-text>
+                </ion-item>
+              </ng-container>
+              <ng-container *ngIf="extraProduct.options.length > 1">
+                <ion-text class="price-radio">{{'$' + extraProduct.optionSelected.price}}</ion-text>
+                <ion-radio-group [(ngModel)]="extraProduct.optionSelected">
+                  <ion-item lines="none" *ngFor="let option of extraProduct.options">
+                    <ion-label>{{option.name | translate }}</ion-label>
+                    <ion-radio slot="start" [value]="option"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+              </ng-container>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+
+  <ng-container *ngIf="!product.extras">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-card class="product">
+            <div class="ion-text-center">
+              <img [src]="product.img"/>
+            </div>
+            <ion-card-header>
+              <ion-card-title class="price">{{('label.price' | translate)+ ': ' + '$' + product.price}}</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" >
+    <ion-fab-button (click)="addProductOrder()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

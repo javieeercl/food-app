@@ -1,0 +1,15 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let c of categories">
+        <ion-card class="list" (click)="goToProducts(c.id)">
+          <img [src]="c.img">
+          <ion-card-header>
+            <ion-card-title>{{c.name | translate}}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,13 @@
+.product-quantity {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  ion-icon {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+}
+
+.no-products {
+  padding-left: 16px;
+}

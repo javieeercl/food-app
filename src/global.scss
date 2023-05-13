@@ -1,0 +1,126 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+ion-loading.custom-loading {
+  --spinner-color: #e68319;
+
+  color: #e68319;
+}
+
+ion-toolbar {
+  --background: #e68319;
+}
+
+ion-badge {
+  --background: #e68319;
+}
+
+ion-button {
+  --background: #e68319;
+  --background-activated: #94510a;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+ion-checkbox {
+  --size: 20px;
+  --background-checked: #e68319;
+}
+
+ion-checkbox::part(container) {
+  border-radius: 6px;
+  border: 2px solid #e68319;
+}
+
+ion-radio {
+  --border-radius: 4px;
+  --inner-border-radius: 4px;
+
+  --color: #fff;
+  --color-checked: #e68319;
+}
+
+ion-radio.ios {
+  width: 20px;
+  height: 20px;
+
+  border: 2px solid #fff;
+  border-radius: 4px;
+}
+
+.radio-checked.ios {
+  border-color: #e68319;
+}
+
+
+ion-fab-button::part(native) {
+  background-color: #e68319;
+  border-radius: 15px;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,.3), 0px 1px 3px 1px rgba(0,0,0,.15);
+  color: white;}
+
+ion-fab-button::part(native):hover::after {
+  background-color: #c9741a;
+}
+
+ion-fab-button::part(native):active::after {
+  background-color: #c9741a;
+}
+
+// ion-button:active {
+//   --background-activated: #88f4be;
+// }
+
+ion-card.list ion-card-header {
+  min-height: 80px;
+}
+ion-card.list ion-card-title{
+  font-size: 16px;
+}
+
+ion-card.list img{
+  width: 200px;
+  height: 150px;
+}
+
+ion-item.item-form {
+  margin-top: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
+  // margin-bottom: 10px;
+}
+
+// ion-label.floating{
+//   color: #686868!important; //change to whatever colour you want here
+// }
+
+
+
+#content {
+  margin-top: 56px;
+  margin-bottom: 56px;
+}
