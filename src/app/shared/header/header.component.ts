@@ -16,13 +16,20 @@ export class HeaderComponent implements OnInit {
   public showInfoUser: boolean;
   public showNewAccount: boolean;
   public showOrder: boolean;
+  public showReserva: boolean;
 
 
   constructor(private router: Router, public auth: AuthService, private navCtrl: NavController, private menuCtrl: MenuController, public orderService: OrderService) {
     this.showInfoUser = false;
     this.showNewAccount = false;
     this.showOrder = false;
+    this.showReserva = false;
 
+  }
+
+  goToReservarMesa() {
+    this.router.navigate(['/reservar-mesa']);
+    this.menuCtrl.close('content');
   }
 
   ngOnInit() {}
@@ -55,6 +62,7 @@ export class HeaderComponent implements OnInit {
     this.showInfoUser = false;
     this.showNewAccount = false;
     this.showOrder = false;
+    this.showReserva = false;
   }
 
   newAccount(){
@@ -67,6 +75,10 @@ export class HeaderComponent implements OnInit {
 
   showPanelOrder(){
     this.showOrder = true;
+  }
+
+  showPanelReserva(){
+    this.showReserva = true;
   }
 
   goToPay(){

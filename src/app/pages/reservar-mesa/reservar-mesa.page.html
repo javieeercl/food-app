@@ -1,0 +1,20 @@
+<ion-header>
+ 
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card>
+      <ion-label>Seleccione una Fecha :</ion-label>
+      <ion-datetime displayFormat="DD/MM/YYYY" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fecha" [(ngModel)]="hora"  [min]="currentYear + '-01-01T10:00:00'" 
+      [max]="currentYear + '-12-31T23:00:00'"
+      [hourValues]="horaValues" 
+      [minuteValues]="minutoValues"></ion-datetime>
+    </ion-card>
+    <ion-item>
+      <ion-label>Nombre :</ion-label>
+      <ion-input type="text" [(ngModel)]="nombre"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button expand="block" (click)="reservar()">Reservar</ion-button>
+</ion-content>

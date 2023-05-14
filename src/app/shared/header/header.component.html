@@ -2,13 +2,13 @@
   <ion-header>
     <ion-toolbar traslucent color="light">
       <ion-item lines="none">
-        <ion-icon name="arrow-back-outline" *ngIf="showInfoUser || showOrder" (click)="back()"></ion-icon>
+        <ion-icon name="arrow-back-outline" *ngIf="showInfoUser || showOrder || showReserva" (click)="back()"></ion-icon>
         <ion-title>{{'label.menu' | translate}}</ion-title>
       </ion-item>
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ng-container *ngIf="!showInfoUser && !showOrder">
+    <ng-container *ngIf="!showInfoUser && !showOrder && !showReserva">
       <ion-list>
         <ion-item (click)="auth.isLogged ? logout(): showPanelUser()">
           <ion-icon slot="start" name="person-outline"></ion-icon>
@@ -18,6 +18,11 @@
           <ion-badge slot="start">{{orderService.numProducts()}}</ion-badge>
           <ion-label>{{'label.see.order'| translate}}</ion-label>
         </ion-item>
+        <ion-item (click)="goToReservarMesa()">
+          <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
+          <a routerLink="/reservar-mesa">Reservar Mesa</a>
+          </ion-item>
+        
       </ion-list>
     </ng-container>
     <ng-container *ngIf="showInfoUser">
