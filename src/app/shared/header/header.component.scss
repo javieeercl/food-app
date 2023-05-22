@@ -7,3 +7,22 @@
   padding-left: 10px;
   min-width: 36px;
 }
+
+ion-menu ion-list ion-item {
+  display: flex;
+  align-items: center;
+}
+
+ion-menu ion-item ion-icon {
+  margin-end: 8px;
+  width: 24px; /* Ajusta el ancho del icono según tus necesidades */
+}
+
+// ion-menu ion-item ion-label {
+//   flex: 1;
+// }
+
+ion-menu ion-item ion-badge {
+  margin-start: auto;
+}
+

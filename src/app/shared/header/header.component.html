@@ -15,14 +15,15 @@
           <ion-label>{{(auth.isLogged ? 'label.logout': 'label.start.session') | translate}}</ion-label>
         </ion-item>
         <ion-item (click)="showPanelOrder()">
-          <ion-badge slot="start">{{orderService.numProducts()}}</ion-badge>
+          <ion-icon slot="start" name="fast-food-outline"></ion-icon>
           <ion-label>{{'label.see.order'| translate}}</ion-label>
+          <ion-badge slot="end">{{orderService.numProducts()}}</ion-badge>
         </ion-item>
         <ion-item (click)="goToReservarMesa()">
           <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
-          <a routerLink="/reservar-mesa">Reservar Mesa</a>
-          </ion-item>
-        
+          <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
+          <ion-label>Reservar Mesa</ion-label>
+        </ion-item>
       </ion-list>
     </ng-container>
     <ng-container *ngIf="showInfoUser">

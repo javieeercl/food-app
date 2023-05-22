@@ -1,0 +1,35 @@
+/* Estilo para el formulario de inicio de sesión */
+
+.menu-sidebar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-sidebar form ion-note {
+  font-size: 12px;
+  color: red; /* Color del mensaje de error */
+}
+
+.menu-sidebar form ion-input {
+  transition: border-color 0.3s ease;
+  box-sizing: border-box; /* Incluir el padding en el ancho total */
+}
+
+.menu-sidebar form ion-input:focus {
+  outline: none;
+  border-color: #555; /* Color del borde al enfocar el campo de entrada */
+}
+
+.menu-sidebar form ion-button[type="submit"],
+.menu-sidebar form ion-button[type="button"] {
+  width: 100%;
+}
+
+/* Estilo adicional para la versión web */
+@media screen and (min-width: 768px) {
+  .menu-sidebar form ion-input {
+    width: auto; /* Cambiar a ancho automático en pantallas más grandes */
+  }
+}

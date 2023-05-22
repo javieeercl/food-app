@@ -9,13 +9,14 @@ import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { ListProductOrderComponent } from './list-product-order/list-product-order.component';
-import { MercadopagoButtonComponent } from './mercadopago-button/mercadopago-button.component';
+import { ReqPasswordComponent } from './req-password/req-password.component';
+
 
 
 
 @NgModule({
   declarations: [FooterComponent, HeaderComponent, LoginComponent,
-    CreateAccountComponent, ListProductOrderComponent, MercadopagoButtonComponent],
+    CreateAccountComponent, ListProductOrderComponent, ReqPasswordComponent],
   imports: [
     IonicModule,
     CommonModule,
@@ -30,7 +31,7 @@ import { MercadopagoButtonComponent } from './mercadopago-button/mercadopago-but
     LoginComponent,
     CreateAccountComponent,
     ListProductOrderComponent,
-    MercadopagoButtonComponent
+    ReqPasswordComponent
   ]
 })
 export class SharedModule {

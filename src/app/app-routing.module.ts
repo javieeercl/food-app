@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'pay',
     loadChildren: () => import('./pages/pay/pay.module').then( m => m.PayPageModule)
   },
+  {
+    path: 'reservar-mesa',
+    loadChildren: () => import('./pages/reservar-mesa/reservar-mesa.module').then( m => m.ReservarMesaPageModule)
+  },
 ];
 
 @NgModule({
