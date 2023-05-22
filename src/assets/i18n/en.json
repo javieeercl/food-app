@@ -55,5 +55,6 @@
     "label.pay.paypal": "Pay with paypal",
     "label.back.home": "Back to home",
     "label.pay.success": "Pay done successly, your order will send to your address {{address}}",
-    "label.pay.fail": "An error occurred during payment"
+    "label.pay.fail": "An error occurred during payment",
+    "label.req.password": "I forgot my password"
 }

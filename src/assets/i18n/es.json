@@ -5,7 +5,7 @@
     "label.complements": "Complementos",
     "label.drink.coffe": "Bebidas y cafes",
     "label.big.menu.bacon": "The Queen bacon menú grande",
-    "label.big.menu": "Menú gigante",
+    "label.big.menu": "Menú ",
     "label.bacon": "Bacon",
     "label.same": "Igual",
     "label.remove": "Quitar",
@@ -35,7 +35,7 @@
     "label.product.add.success": "Producto añadido correctamente",
     "label.email": "Email",
     "label.password": "Contraseña",
-    "label.login": "Login",
+    "label.login": "Iniciar Sesión",
     "label.back": "Volver",
     "label.new.account": "Crear una Cuenta",
     "label.login.success": "Ingresado con éxito",
@@ -45,7 +45,7 @@
     "label.create.account.success": "Cuenta creada correctamente",
     "label.create.account.error": "No se creo la cuenta correctamente",
     "label.menu": "Menu",
-    "label.logout": "Logout",
+    "label.logout": "Cerrar Sesión",
     "label.start.session": "Iniciar sesión",
     "label.total.order": "Total pedido: ",
     "label.no.products": "No hay productos",
@@ -55,6 +55,7 @@
     "label.pay.paypal": "Pagar con paypal",
     "label.back.home": "Volver al inicio",
     "label.pay.success": "Pago realizado con éxito, su pedido será enviado a su dirección {{address}}",
-    "label.pay.fail": "Se ha producido un error durante el pago"
+    "label.pay.fail": "Se ha producido un error durante el pago",
+    "label.req.password": "Olvidé mi contraseña"
 
 }
