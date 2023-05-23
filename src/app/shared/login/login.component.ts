@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
@@ -15,9 +15,9 @@ export class LoginComponent implements OnInit {
   @Output () newAccount: EventEmitter<boolean>;
   @Output () back: EventEmitter<boolean>;
   @Output () doLogin: EventEmitter<boolean>;
+  isForgot:boolean;
 
   public user: User;
-
   constructor(private auth: AuthService,
     private toast: ToastService,
     private translate: TranslateService) {
@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isForgot=false;
   }
 
   login(){
@@ -41,8 +42,33 @@ export class LoginComponent implements OnInit {
     })
   }
 
+
+  forgotPassword(option: Number){
+
+      try {
+
+        if (option == 1) {
+           this.isForgot = true;
+          console.log('olvidé ')
+        } else {
+          this.isForgot = false;
+          console.log('recuperar ')
+        }
+
+      } catch (error) {
+        console.log('catch',error)
+      }
+
+    // console.log('======Fin=====')
+  }
+
   showNewAccount(){
     this.newAccount.emit(true);
+  }
+
+  backLogin(){
+    this.isForgot =false;
+    console.log('volver ')
   }
 
   exit(){

@@ -9,14 +9,13 @@ import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { ListProductOrderComponent } from './list-product-order/list-product-order.component';
-import { ReqPasswordComponent } from './req-password/req-password.component';
 
 
 
 
 @NgModule({
   declarations: [FooterComponent, HeaderComponent, LoginComponent,
-    CreateAccountComponent, ListProductOrderComponent, ReqPasswordComponent],
+    CreateAccountComponent, ListProductOrderComponent],
   imports: [
     IonicModule,
     CommonModule,
@@ -30,8 +29,7 @@ import { ReqPasswordComponent } from './req-password/req-password.component';
     HeaderComponent,
     LoginComponent,
     CreateAccountComponent,
-    ListProductOrderComponent,
-    ReqPasswordComponent
+    ListProductOrderComponent
   ]
 })
 export class SharedModule {
