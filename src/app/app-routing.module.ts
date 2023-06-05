@@ -27,6 +27,14 @@ const routes: Routes = [
     path: 'reservar-mesa',
     loadChildren: () => import('./pages/reservar-mesa/reservar-mesa.module').then( m => m.ReservarMesaPageModule)
   },
+  {
+    path: 'reset-password',
+    loadChildren: () => import('./pages/reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
+  },
+  {
+    path: 'solicitar-garzon',
+    loadChildren: () => import('./pages/solicitar-garzon/solicitar-garzon.module').then( m => m.SolicitarGarzonPageModule)
+  },
 ];
 
 @NgModule({

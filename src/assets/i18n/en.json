@@ -1,5 +1,5 @@
 {
-    "label.menu.grill": "Grilled menu",
+    "label.menu.grill": "burguer",
     "label.salad.more": "Salads",
     "label.desserts": "Desserts",
     "label.complements": "Complements",
@@ -7,7 +7,7 @@
     "label.big.menu.bacon": "Big menu The Queen bacon",
     "label.big.menu": "Big menu",
     "label.bacon": "Bacon",
-    "label.same": "Same",
+    "label.same": "Keep",
     "label.remove": "Remove",
     "label.extra": "Extra",
     "label.cheese": "Queso",

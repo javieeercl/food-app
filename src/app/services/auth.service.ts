@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { reject } from 'lodash-es';
+import { InteractionService } from './interaction.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class AuthService {
 
   private _isLogged: boolean
 
-constructor(private afAuth: AngularFireAuth) {
+constructor(private afAuth: AngularFireAuth,
+            private interaction: InteractionService) {
   this._isLogged = false;
 
   this.afAuth.authState.subscribe(user => {
@@ -57,6 +59,22 @@ constructor(private afAuth: AngularFireAuth) {
         })
       }
     })
+  }
+
+  async requestPassword(email: string){
+    return await this.afAuth.sendPasswordResetEmail(email)
+    .catch((error) => {
+      this.interaction.toastError(error);
+      throw new Error(error);
+    });;
+  }
+
+  async passwordReset(password: string, oobCode: string){
+    return await this.afAuth.confirmPasswordReset(oobCode, password)
+      .catch((error) => {
+        this.interaction.toastError(error);
+        throw new Error(error);
+      });
   }
 
 }

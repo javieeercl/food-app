@@ -3,6 +3,8 @@ import { ToastService } from './../../services/toast.service';
 import { Component, Input, Output, OnInit, EventEmitter  } from '@angular/core';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { InteractionService } from 'src/app/services/interaction.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,9 @@ export class LoginComponent implements OnInit {
   public user: User;
   constructor(private auth: AuthService,
     private toast: ToastService,
-    private translate: TranslateService) {
+    private translate: TranslateService,
+    private interaction: InteractionService,
+    private router: Router) {
     this.newAccount = new EventEmitter<boolean>();
     this.back = new EventEmitter<boolean>();
     this.doLogin = new EventEmitter<boolean>();
@@ -42,6 +46,24 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  async requestPassword(){
+    if(this.user && this.user.email){
+      const res = await this.interaction.presentAlert('Enviando Correo', 'Te enviaremos un correo de recuperación', '', 'Ok');
+        if (res) {
+          await this.interaction.showLoading('Enviando...');
+          await this.auth.requestPassword(this.user.email).then(() => {
+            this.user.email = ''; // Clearing the email after it's used
+            this.interaction.closeLoading();
+            this.interaction.presentToast('Correo enviado con exito');
+            this.router.navigate(['/categories']);
+          }).catch(err => {
+            this.interaction.closeLoading();
+          });
+        }
+    }  else {
+      this.interaction.presentAlert('Formulario inválido', 'Datos incorrectos o incompletos', '', 'Ok');
+    }
+  }
 
   forgotPassword(option: Number){
 
@@ -52,14 +74,13 @@ export class LoginComponent implements OnInit {
           console.log('olvidé ')
         } else {
           this.isForgot = false;
+          this.requestPassword();
           console.log('recuperar ')
         }
 
       } catch (error) {
         console.log('catch',error)
       }
-
-    // console.log('======Fin=====')
   }
 
   showNewAccount(){

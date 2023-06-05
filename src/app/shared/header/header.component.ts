@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   public showNewAccount: boolean;
   public showOrder: boolean;
   public showReserva: boolean;
+  public showGarzon: boolean;
 
 
   constructor(private router: Router, public auth: AuthService, private navCtrl: NavController, private menuCtrl: MenuController, public orderService: OrderService) {
@@ -22,11 +23,17 @@ export class HeaderComponent implements OnInit {
     this.showNewAccount = false;
     this.showOrder = false;
     this.showReserva = false;
+    this.showGarzon = false;
 
   }
 
   goToReservarMesa() {
     this.router.navigate(['/reservar-mesa']);
+    this.menuCtrl.close('content');
+  }
+
+  goToSolicitarGarzon() {
+    this.router.navigate(['/solicitar-garzon']);
     this.menuCtrl.close('content');
   }
 
@@ -61,6 +68,7 @@ export class HeaderComponent implements OnInit {
     this.showNewAccount = false;
     this.showOrder = false;
     this.showReserva = false;
+    this.showGarzon = false;
   }
 
   newAccount(){
@@ -77,6 +85,10 @@ export class HeaderComponent implements OnInit {
 
   showPanelReserva(){
     this.showReserva = true;
+  }
+
+  showPanelGarzon(){
+    this.showGarzon = true;
   }
 
   goToPay(){
