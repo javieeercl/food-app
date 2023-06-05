@@ -52,9 +52,10 @@ export class LoginComponent implements OnInit {
         if (res) {
           await this.interaction.showLoading('Enviando...');
           await this.auth.requestPassword(this.user.email).then(() => {
-            this.user.email = ''; // Clearing the email after it's used
+            this.isForgot = false;
+            this.user.email = '';
             this.interaction.closeLoading();
-            this.interaction.presentToast('Correo enviado con exito');
+            this.interaction.presentToast('Correo de recuperación enviado con exito');
             this.router.navigate(['/categories']);
           }).catch(err => {
             this.interaction.closeLoading();
@@ -66,18 +67,12 @@ export class LoginComponent implements OnInit {
   }
 
   forgotPassword(option: Number){
-
       try {
-
         if (option == 1) {
            this.isForgot = true;
-          console.log('olvidé ')
         } else {
-          this.isForgot = false;
           this.requestPassword();
-          console.log('recuperar ')
         }
-
       } catch (error) {
         console.log('catch',error)
       }
@@ -89,7 +84,6 @@ export class LoginComponent implements OnInit {
 
   backLogin(){
     this.isForgot =false;
-    console.log('volver ')
   }
 
   exit(){

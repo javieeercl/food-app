@@ -38,6 +38,7 @@
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "@types/scriptjs": "^0.0.2",
+    "@zxing/library": "^0.20.0",
     "body-parser": "^1.20.1",
     "browser": "^0.2.6",
     "card.io.cordova.mobilesdk": "^2.1.0",

@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Solicitud de Garzón</title>
-</head>
-<body>
-  <h1>Solicitud de Garzón</h1>
-
-  <button id="scanBtn">Escanear</button>
-
-  <div id="toast" style="display: none;">El garzón está en camino a tu mesa.</div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+<ion-content>
+  <div class="container">
+    <h2>Solicitar Garzón</h2>
+    <div class="camera-container">
+      <video id="videoElement" autoplay playsinline muted></video>
+    </div>
+    <p class="scan-text">Pulse el botón para escanear el código QR</p>
+    <ion-button (click)="escanearQR()">Escanear</ion-button>
+  </div>
+</ion-content>

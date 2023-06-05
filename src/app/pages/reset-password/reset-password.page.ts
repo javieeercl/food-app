@@ -64,7 +64,7 @@ export class ResetPasswordPage {
             this.interaction.closeLoading();
             this.interaction.presentToast('Contraseña modificada con exito');
             this.form.reset();
-            this.router.navigate(['/publico/login']);
+            this.router.navigate(['/categories']);
           }).catch(err => {
 
             this.interaction.closeLoading();
