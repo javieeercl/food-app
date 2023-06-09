@@ -1,10 +1,16 @@
 <ion-content>
-  <div class="container">
-    <h2>Solicitar Garzón</h2>
-    <div class="camera-container">
-      <video id="videoElement" autoplay playsinline muted></video>
-    </div>
-    <p class="scan-text">Pulse el botón para escanear el código QR</p>
-    <ion-button (click)="escanearQR()">Escanear</ion-button>
+  <div class="card">
+    <ion-card class="centered-card">
+      <ion-card-header>
+        <ion-card-title>Solicitar Garzón</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="content-area">
+        <div class="camera-container">
+          <video id="videoElement" autoplay playsinline muted></video>
+        </div>
+        <p class="scan-text">Pulse el botón para escanear el código QR</p>
+        <ion-button (click)="escanearQR()">Escanear</ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

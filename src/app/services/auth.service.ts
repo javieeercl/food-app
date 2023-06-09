@@ -21,6 +21,10 @@ constructor(private afAuth: AngularFireAuth,
   })
 }
 
+  async currentUserId(): Promise<string> {
+    let user = await this.afAuth.currentUser;
+    return user ? user.uid : null;
+  }
   get isLogged() {
     return this._isLogged;
   }
