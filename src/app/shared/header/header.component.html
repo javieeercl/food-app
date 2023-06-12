@@ -29,8 +29,8 @@
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
           <ion-label>Reservar Garzón</ion-label>
         </ion-item>
-         <ion-item (click)="goToPerfil()" [hidden]="!showInfoUser" >
-          <ion-icon slot="start" name=""></ion-icon> 
+         <ion-item (click)="goToPerfil()" *ngIf="auth.isLogged" >
+          <ion-icon slot="start" name="person-circle-outline"></ion-icon> 
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
           <ion-label>Perfil</ion-label> 
        </ion-item> 

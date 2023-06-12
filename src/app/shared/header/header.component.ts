@@ -41,7 +41,6 @@ export class HeaderComponent implements OnInit {
     this.menuCtrl.close('content');
   }
   goToPerfil() {
-    
     this.router.navigate(['/perfil']);
     this.menuCtrl.close('content');
   }
@@ -110,7 +109,6 @@ export class HeaderComponent implements OnInit {
     this.menuCtrl.close('content')
     this.navCtrl.navigateForward('pay');
   }
-
   login() {
     // Lógica para iniciar sesión
     this.isLoggedIn = true; // Establecer isLoggedIn en verdadero después de iniciar sesión exitosamente 
