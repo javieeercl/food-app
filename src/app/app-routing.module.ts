@@ -34,7 +34,13 @@ const routes: Routes = [
   {
     path: 'solicitar-garzon',
     loadChildren: () => import('./pages/solicitar-garzon/solicitar-garzon.module').then( m => m.SolicitarGarzonPageModule)
+  },  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
+
+  
+
 ];
 
 @NgModule({

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BrowserQRCodeReader } from '@zxing/library';
 import { ToastController } from '@ionic/angular';
 import { SolicitarGarzonService } from 'src/app/services/solicitar-garzon.service';
 import { AuthService } from 'src/app/services/auth.service';
+
 
 @Component({
   selector: 'app-solicitar-garzon',
@@ -10,7 +11,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./solicitar-garzon.page.scss'],
 })
 export class SolicitarGarzonPage {
-  constructor(private toastController: ToastController, private solGarzon: SolicitarGarzonService, private auth: AuthService) {}
+  constructor(private toastController: ToastController, private solGarzon: SolicitarGarzonService, private auth: AuthService, ) {}
+
 
   async obtenerID(){
     let currentUserId = await this.auth.currentUserId();  // Obtener el ID del usuario actual
@@ -61,4 +63,7 @@ export class SolicitarGarzonPage {
     });
     toast.present();
   }
+
+  
+  
 }
