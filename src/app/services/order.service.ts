@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Order } from '../models/order';
 import * as moment from 'moment';
 import { forEach } from 'lodash-es';
+import { getDatabase, ref, push } from "firebase/database";
 
 @Injectable({
   providedIn: 'root'
@@ -52,8 +53,13 @@ constructor(private fdb: AngularFireDatabase) {
     return finalOrder;
   }
 
+  createHistOrder(order: any, userId: string) {
+  const db = getDatabase();
+  const histOrdersRef = ref(db, `users/${userId}/histOrders`);
+  return push(histOrdersRef, order);
+}
+
   createOrder(){
     return this.fdb.list('orders').push(this.convertOrder());
   }
-
 }

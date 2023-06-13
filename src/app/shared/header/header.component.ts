@@ -17,7 +17,8 @@ export class HeaderComponent implements OnInit {
   public showReserva: boolean;
   public showGarzon: boolean;
   public showPerfil: boolean;
-  public isLoggedIn: boolean = false
+  public isLoggedIn: boolean = false;
+  public showReporte: boolean = false;
 
 
 
@@ -28,6 +29,7 @@ export class HeaderComponent implements OnInit {
     this.showReserva = false;
     this.showGarzon = false;
     this.showPerfil = false;
+    this.showReporte = false;
 
   }
 
@@ -45,6 +47,11 @@ export class HeaderComponent implements OnInit {
     this.menuCtrl.close('content');
   }
 
+  goToReportes() {
+    this.router.navigate(['/reportes']);
+    this.menuCtrl.close('content');
+  }    
+  
   ngOnInit() {}
 
   showBackButton(){
@@ -78,6 +85,7 @@ export class HeaderComponent implements OnInit {
     this.showOrder = false;
     this.showReserva = false;
     this.showGarzon = false;
+    this.showReporte = false;
   }
 
   newAccount(){
@@ -101,6 +109,10 @@ export class HeaderComponent implements OnInit {
   }
   showPanelPerfil(){
     this.showPerfil = true;
+  }
+
+  showPanelReporte(){
+    this.showReporte = true;
   }
 
   goToPay(){
