@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Reportes de Órdenes
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button expand="full" (click)="mostrarTablaCompras()" *ngIf="mostrarBoton">Mostrar Ventas</ion-button>
+  <ion-button expand="full" (click)="otroBoton()">Mostrar Reservas</ion-button>
+
+  <table *ngIf="mostrarTabla">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Dirección</th>
+        <!-- Agrega aquí los encabezados adicionales de la tabla -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders | async">
+        <td>{{ order.user }}</td>
+        <td>{{ order.address }}</td>
+        <!-- Agrega aquí las celdas adicionales de la tabla -->
+      </tr>
+    </tbody>
+  </table>
+</ion-content>
