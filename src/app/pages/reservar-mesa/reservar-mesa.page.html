@@ -1,20 +1,30 @@
-<ion-header>
- 
-</ion-header>
-
 <ion-content>
   <ion-list>
     <ion-card>
-      <ion-label>Seleccione una Fecha :</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="fecha" [(ngModel)]="hora"  [min]="currentYear + '-01-01T10:00:00'" 
-      [max]="currentYear + '-12-31T23:00:00'"
-      [hourValues]="horaValues" 
-      [minuteValues]="minutoValues"></ion-datetime>
+      <ion-label>Seleccione una Fecha:</ion-label>
+      <ion-datetime presentation="date" displayFormat="DD/MM/YYYY" pickerFormat="YYYY-MM-DD" [(ngModel)]="fecha"
+      [min]="currentYear + '-01-01'"
+      [max]="currentYear + '-12-31'"
+      (ionChange)="checkFecha()"></ion-datetime>
     </ion-card>
-    <ion-item>
+    <ion-card *ngIf="isFechaSelected">
+      <ion-item>
+        <ion-label>Mesa</ion-label>
+        <ion-select [(ngModel)]="mesaId" (ionChange)="updateHorasAfterMesaSelection()">
+          <ion-select-option *ngFor="let mesa of mesas" [value]="mesa.id">{{mesa.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item *ngIf="isMesaSelected">
+        <ion-label>Seleccione una Hora:</ion-label>
+        <ion-select [(ngModel)]="hora">
+          <ion-select-option *ngFor="let hora of horaValues" [value]="hora">{{hora}}:00</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card>
+    <ion-item *ngIf="isMesaSelected">
       <ion-label>Nombre :</ion-label>
       <ion-input type="text" [(ngModel)]="nombre"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button expand="block" (click)="reservar()">Reservar</ion-button>
+  <ion-button expand="block" *ngIf="isMesaSelected" (click)="reservar()">Reservar</ion-button>
 </ion-content>
