@@ -4,6 +4,7 @@ import { ToastService } from './../../services/toast.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserCredential } from 'firebase/auth';
 
 @Component({
   selector: 'app-create-account',
@@ -30,8 +31,9 @@ export class CreateAccountComponent implements OnInit {
   }
 
   createAccount() {
-    this.auth.createAccount(this.user.email, this.user.password).then((result) => {
+    this.auth.createAccount(this.user.email, this.user.password).then((result: UserCredential) => {
       console.log(result);
+      this.user.uid = result.user.uid; // Set the uid from the result as the id of the user
       this.userService.addUser(this.user);
       this.doCreateAccount.emit(true);
       this.toast.showToast(this.translate.instant('label.create.account.success'));

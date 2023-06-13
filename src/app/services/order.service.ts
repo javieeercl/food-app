@@ -20,6 +20,14 @@ constructor(private fdb: AngularFireDatabase) {
     return this._order;
   }
 
+  isOrderAllowed() {
+    const now = moment();
+    const start = moment('00:00:01', 'HH:mm:ss');
+    const end = moment('11:59:59', 'HH:mm:ss');
+
+    return !now.isBetween(start, end);
+  }
+
   numProducts() {
     return this._order.numProducts();
   }
@@ -35,7 +43,8 @@ constructor(private fdb: AngularFireDatabase) {
   convertOrder(){
     const finalOrder = {
       "products": [],
-      "date": moment().format('ll'),
+      "date": moment().format('ll'), // sólo la fecha
+      "time": moment().format('LT'), // hora de la compra
       "address": this._order.address,
       "user": this._order.user,
       "priceOrder": this.totalOrder()
@@ -54,10 +63,17 @@ constructor(private fdb: AngularFireDatabase) {
   }
 
   createHistOrder(order: any, userId: string) {
-  const db = getDatabase();
-  const histOrdersRef = ref(db, `users/${userId}/histOrders`);
-  return push(histOrdersRef, order);
-}
+    const db = getDatabase();
+
+    // Get the current month and year
+    const monthYear = moment().format('MMYYYY');
+
+    // Include the month and year in the reference path
+    const histOrdersRef = ref(db, `histOrder/${userId}/historial/${monthYear}`);
+
+    return push(histOrdersRef, order);
+  }
+
 
   createOrder(){
     return this.fdb.list('orders').push(this.convertOrder());

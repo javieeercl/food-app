@@ -2,12 +2,20 @@ import { IUser } from './../interfaces/iuser';
 import { set, get } from 'lodash-es'
 
 export class User implements IUser {
+  data: any;
   constructor(data: any){
     set(this, 'data', data);
   }
 
   getData(){
     return get(this, 'data');
+  }
+
+  get uid(): any {
+    return get(this, 'data.uid');
+  }
+  set uid(value: string) {
+    set(this, 'data.uid', value);
   }
 
   get email(): any {

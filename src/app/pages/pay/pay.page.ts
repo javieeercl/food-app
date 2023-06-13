@@ -32,6 +32,14 @@ export class PayPage implements OnInit {
   }
 
   createOrder() {
+
+        // Check if the order is allowed at the current time
+    // if (!this.orderService.isOrderAllowed()) {
+    //   console.error("No se pueden realizar compras entre las 00:00 y las 11:59");
+    //   this.toastService.showToast(this.translate.instant('No se pueden realizar compras entre las 00:00 y las 11:59'))
+    //   return;
+    // }
+
     this.auth.currentUserId().then(userId => {
       if (!userId) {
         // Handle the case where there is no user ID
@@ -42,22 +50,23 @@ export class PayPage implements OnInit {
           console.log(users[0].address);
           this.orderService.order.address = users[0].address;
           this.orderService.order.user = users[0].email;
-          
           this.orderService.createOrder().then( data => {
             console.log("Se ha creado el objeto ", data);
-    
+
             // Now we can use userId here
-            this.orderService.createHistOrder(this.orderService.order, userId);
-    
+            // Pass the converted order to createHistOrder
+            this.orderService.createHistOrder(this.orderService.convertOrder(), userId);
+
             this.toastService.showToast(this.translate.instant('label.pay.success', { address: this.orderService.order.address }))
             this.orderService.clearOrder();
           }).catch(e => {
             console.error("Ha habido un error " + e)
             this.toastService.showToast(this.translate.instant('label.pay.fail'))
           })
+
         })
       })
-      
+
     })
   }
 
@@ -68,5 +77,5 @@ export class PayPage implements OnInit {
   back() {
     this.showNewAccount = false;
   }
-  
+
 }
