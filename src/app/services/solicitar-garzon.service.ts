@@ -15,9 +15,4 @@ crearNotificacion(nombreLista:string, idUser: string, peticion: string, data: an
   return ref.push(data);
 }
 
-
-// createLista(data: any, nombreLista: string, ) {
-//   return this.fdb.list(nombreLista).push(data);
-// }
-
 }
