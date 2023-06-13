@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BrowserQRCodeReader } from '@zxing/library';
 import { ToastController } from '@ionic/angular';
 import { SolicitarGarzonService } from 'src/app/services/solicitar-garzon.service';
 import { AuthService } from 'src/app/services/auth.service';
+
 
 @Component({
   selector: 'app-solicitar-garzon',
@@ -102,4 +103,7 @@ export class SolicitarGarzonPage {
     });
     toast.present();
   }
+
+
+
 }

@@ -16,6 +16,9 @@ export class HeaderComponent implements OnInit {
   public showOrder: boolean;
   public showReserva: boolean;
   public showGarzon: boolean;
+  public showPerfil: boolean;
+  public isLoggedIn: boolean = false
+
 
 
   constructor(private router: Router, public auth: AuthService, private navCtrl: NavController, private menuCtrl: MenuController, public orderService: OrderService) {
@@ -24,6 +27,7 @@ export class HeaderComponent implements OnInit {
     this.showOrder = false;
     this.showReserva = false;
     this.showGarzon = false;
+    this.showPerfil = false;
 
   }
 
@@ -34,6 +38,10 @@ export class HeaderComponent implements OnInit {
 
   goToSolicitarGarzon() {
     this.router.navigate(['/solicitar-garzon']);
+    this.menuCtrl.close('content');
+  }
+  goToPerfil() {
+    this.router.navigate(['/perfil']);
     this.menuCtrl.close('content');
   }
 
@@ -56,6 +64,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(){
+    this.isLoggedIn = false;
     this.auth.logout();
   }
 
@@ -90,6 +99,9 @@ export class HeaderComponent implements OnInit {
   showPanelGarzon(){
     this.showGarzon = true;
   }
+  showPanelPerfil(){
+    this.showPerfil = true;
+  }
 
   goToPay(){
     this.back();
@@ -97,4 +109,11 @@ export class HeaderComponent implements OnInit {
     this.menuCtrl.close('content')
     this.navCtrl.navigateForward('pay');
   }
+  login() {
+    // Lógica para iniciar sesión
+    this.isLoggedIn = true; // Establecer isLoggedIn en verdadero después de iniciar sesión exitosamente 
+  }
+
+  
+  
 }

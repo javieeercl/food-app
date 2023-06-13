@@ -99,3 +99,14 @@ ion-content {
     max-width: 768px;
   }
 }
+.swal2-center {
+  transform: translate(-50%, -50%);
+  top: 50% !important;
+  left: 50% !important;
+}
+
+.swal2-center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
