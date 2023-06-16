@@ -1,47 +1,28 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      <ion-button expand="full" (click)="mostrarTablaCompras()" *ngIf="mostrarBoton">Mostrar Ventas</ion-button>
-      <ion-button expand="full" (click)="mostrarTablaReservas()" *ngIf="mostrarBoton">Mostrar Reservas</ion-button>
+      Reportes de Órdenes
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  
+  <ion-button expand="full" (click)="mostrarTablaCompras()" *ngIf="mostrarBoton">Mostrar Ventas</ion-button>
+  <ion-button expand="full" (click)="otroBoton()">Mostrar Reservas</ion-button>
 
   <table *ngIf="mostrarTabla">
     <thead>
       <tr>
-        <th>ID de Usuario</th>
-        <th>Producto</th>
-        <th>Cantidad</th>
-        <th>Fecha</th>
+        <th>Usuario</th>
+        <th>Dirección</th>
+        <!-- Agrega aquí los encabezados adicionales de la tabla -->
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let venta of ventas">
-        <td>{{ venta.idUsuario }}</td>
-        <td>{{ venta.producto }}</td>
-        <td>{{ venta.cantidad }}</td>
-        <td>{{ venta.fecha }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table *ngIf="mostrarTablaReservas">
-    <thead>
-      <tr>
-        <th>ID de Usuario</th>
-        <th>Cantidad de Mesas Reservadas</th>
-        <th>Fecha</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let reserva of reservas">
-        <td>{{ reserva.idUsuario }}</td>
-        <td>{{ reserva.cantidadMesas }}</td>
-        <td>{{ reserva.fecha }}</td>
+      <tr *ngFor="let order of orders | async">
+        <td>{{ order.user }}</td>
+        <td>{{ order.address }}</td>
+        <!-- Agrega aquí las celdas adicionales de la tabla -->
       </tr>
     </tbody>
   </table>
