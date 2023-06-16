@@ -44,6 +44,12 @@ ion-button {
   --background-activated: #94510a;
   padding-left: 16px;
   padding-right: 16px;
+
+}
+
+.button {
+  --border-radius: 50px;
+  /* el resto de tus estilos... */
 }
 
 ion-checkbox {

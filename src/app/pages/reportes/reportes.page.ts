@@ -3,6 +3,10 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface Order {
 
@@ -25,11 +29,12 @@ interface MonthOption {
   styleUrls: ['./reportes.page.scss'],
 })
 export class ReportesPage implements OnInit {
+  totalSales: number = 0;
   mesSeleccionado = undefined;
   orders: Observable<Order[]>;
   mostrarTabla: boolean = false;
   mostrarBoton: boolean = true;
-  selectedMonth: number;
+  selectedMonth: number[] = [];
   selectedYear: number;
   months: MonthOption[] = [
     { value: 1, label: 'Enero' },
@@ -63,37 +68,80 @@ export class ReportesPage implements OnInit {
     }
   }
 
-  async buscarOrdenes() {
-    // Convertir el mes y el año a su formato correspondiente
-    const formattedMonth = this.selectedMonth.toString().padStart(2, '0');
-    const formattedYear = this.selectedYear.toString();
+  async exportToPDF() {
+    // Crear una nueva instancia de jsPDF
+    const pdf = new jsPDF();
 
-    // Obtener la referencia a la colección adecuada
-    const collectionPath = `orders/${formattedMonth}${formattedYear}`;
-    const ordersRef = this.fdb.list<Order>(collectionPath);
+    // Añadir el título del informe
+    pdf.setFontSize(18);
+    pdf.text('Reporte de Órdenes', 10, 10);
 
-    try {
-      // Obtener los datos de la colección
-      this.orders = ordersRef.valueChanges();
+    // Añadir la fecha y hora de la generación del informe
+    const now = new Date();
+    pdf.setFontSize(11);
+    pdf.text('Generado el: ' + now.toLocaleString(), 10, 20);
 
-      // Mostrar la tabla y ocultar el botón
-      this.mostrarTabla = true;
-      this.mostrarBoton = false;
+    // Convertir la tabla en un canvas usando html2canvas
+    const content = document.querySelector('table');
+    const canvas = await html2canvas(content, { scale: 1 });
+    const imgData = canvas.toDataURL('image/png');
 
-      // Verificar si no hay registros y mostrar un toast
-      const ordersSnapshot = await ordersRef.query.once('value');
-      if (!ordersSnapshot.exists()) {
-        this.mostrarTabla = false;
-        this.mostrarBoton = true;
-        this.presentToast('No se encontraron registros para el mes y año seleccionados.');
-      } else {
-        this.presentToast('Registros filtrados.');
-      }
-    } catch (error) {
-      console.error('Error al buscar las órdenes:', error);
-      this.presentToast('Ocurrió un error al buscar las órdenes. Por favor, inténtalo de nuevo más tarde.');
-    }
+    // Añadir la tabla al PDF
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 30, pdfWidth, pdfHeight);
+
+    // Añadir el total de ventas al final del informe
+    pdf.setFontSize(14);
+    pdf.text('Total de ventas: ' + this.totalSales.toFixed(2), 10, pdfHeight + 40);
+
+    // Guardar el PDF
+    pdf.save('reporte_pedidos.pdf');
   }
+
+
+  async buscarOrdenes() {
+    const ordersObservables: Observable<Order[]>[] = [];
+    let emptyMonths = 0; // Contador de meses sin datos
+    this.totalSales = 0;
+
+    for (const month of this.selectedMonth) {
+        const formattedMonth = month.toString().padStart(2, '0');
+        const formattedYear = this.selectedYear.toString();
+
+        const collectionPath = `orders/${formattedMonth}${formattedYear}`;
+        const ordersRef = this.fdb.list<Order>(collectionPath);
+
+        // Obtener un snapshot solo una vez para verificar si hay datos
+        const ordersSnapshot = await ordersRef.query.once('value');
+        if (!ordersSnapshot.exists()) {
+            emptyMonths += 1;
+        } else {
+            // Si hay datos, suma los totales de los pedidos a totalSales
+            ordersSnapshot.forEach(orderSnap => {
+                this.totalSales += Number(orderSnap.val().priceOrder);
+            });
+        }
+
+        ordersObservables.push(ordersRef.valueChanges());
+    };
+
+    // Si todos los meses seleccionados están vacíos, muestra un toast
+    if (emptyMonths === this.selectedMonth.length) {
+        this.presentToast('No se encontraron registros para los meses y año seleccionados.');
+    } else {
+        this.presentToast('Registros filtrados.');
+    }
+
+    this.orders = combineLatest(ordersObservables).pipe(
+        map(arr => arr.reduce((acc, cur) => acc.concat(cur)))
+    );
+
+    this.mostrarTabla = true;
+    this.mostrarBoton = false;
+  }
+
 
   handleChange(ev) {
     this.mesSeleccionado = ev.target.value;

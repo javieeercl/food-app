@@ -1,6 +1,12 @@
+import { ToastService } from './../../services/toast.service';
+import { UserService } from './../../services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { AngularFireDatabase } from '@angular/fire/compat/database'; // change this if necessary
+import { ReservaService } from 'src/app/services/reserva.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-reservar-mesa',
@@ -20,7 +26,7 @@ export class ReservarMesaPage implements OnInit {
   horaValues: string[] = ['12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
   mesas: any[];
 
-  constructor(private toastController: ToastController, private db: AngularFireDatabase) {
+  constructor(private toastService: ToastService,private userService: UserService,private auth: AuthService, private toastController: ToastController, private db: AngularFireDatabase, private reservaService: ReservaService) {
     this.currentYear = new Date().getFullYear();
   }
 
@@ -151,6 +157,7 @@ updateHorasAfterMesaSelection() {
       // If reserva is available
       mesaData.reservas[reservaIndex].reservado = true;
       mesaRef.update(mesaData);
+      this.createHistReserva(mesaData);
 
       this.toastController.create({
         message: `Su mesa ha sido reservada. Hora: ${this.hora}`,
@@ -158,4 +165,29 @@ updateHorasAfterMesaSelection() {
       }).then(toast => toast.present());
     });
   }
+
+  createHistReserva(mesaData: string) {
+    this.auth.currentUserId().then(userId => {
+      if (!userId) {
+        // Handle the case where there is no user ID
+        return;
+      }
+      this.auth.currentUser().then(user => {
+        this.userService.getAddressUser(user.email).subscribe((users) => {
+          console.log(users[0].email);
+          this.reservaService.createHistReserva(mesaData, userId).then(data => {
+            console.log("Se ha creado el objeto ", data);
+          }).catch(e => {
+            console.error("Ha habido un error " + e);
+            this.toastService.showToast('Error al crear registro en historial');
+          });
+        }, error => {
+          console.error("Ha habido un error " + error);
+          this.toastService.showToast('Error al obtener la dirección del usuario');
+        });
+      });
+    });
+  }
+
 }
+
