@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { BrowserQRCodeReader } from '@zxing/library';
-import { ToastController } from '@ionic/angular';
 import { SolicitarGarzonService } from 'src/app/services/solicitar-garzon.service';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -20,7 +19,7 @@ export class SolicitarGarzonPage {
   tiempoRestante = null;
   timerId = null;
 
-  constructor(private toastController: ToastController, private solGarzon: SolicitarGarzonService, private auth: AuthService) {}
+  constructor(private solGarzon: SolicitarGarzonService, private auth: AuthService) {}
 
   async obtenerID(){
     let currentUserId = await this.auth.currentUserId();  // Obtener el ID del usuario actual
@@ -47,7 +46,7 @@ export class SolicitarGarzonPage {
           this.tiempoRestante = null;
         }
       }, 1000);
-      await this.mostrarToast('Debes esperar ' + this.tiempoRestante + ' segundos antes de intentar de nuevo', 5000);
+      await this.enviarNotificacion('Debes esperar ' + this.tiempoRestante + ' segundos antes de intentar de nuevo');
       return false; // No se puede realizar un nuevo intento
     }
 
@@ -84,26 +83,27 @@ export class SolicitarGarzonPage {
 
         const path = 'solicitudes';
         const idUser = await this.auth.currentUserId();  // Obtener el ID del usuario actual
-        const peticion = 'Peticiones Usuario';
+        const peticion = 'Peticiones Usuario';  
 
         this.solGarzon.crearNotificacion(path, idUser, peticion, nuevaSolicitud);
-        await this.mostrarToast('El garzón está en camino a la mesa ' + nMesa, 5000);
+        const tituloNotificacion = 'Notificación de garzón';
+        const cuerpoNotificacion = 'El garzón está en camino a la mesa ' + nMesa;
+
+        await this.enviarNotificacion(cuerpoNotificacion);
       }
 
     } catch (error) {
       console.error(error);
-      await this.mostrarToast('Error al escanear el código QR' + error.message, 5000);
+      await this.enviarNotificacion('Error al escanear el código QR' + error.message);
     }
   }
 
-  async mostrarToast(message: string, duration: number) {
-    const toast = await this.toastController.create({
-      message,
-      duration
-    });
-    toast.present();
+  async enviarNotificacion(message: string) {
+    console.log('Notificación push enviada:', message);
+    } catch (error) {
+      console.error('Error al enviar la notificación push:', error);
+    }
   }
 
 
 
-}
