@@ -12,11 +12,13 @@
 ion-menu ion-list ion-item {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
+
 
 ion-menu ion-item ion-icon {
   margin-right: 8px;
-  width: 24px; /* Ajusta el ancho del icono según tus necesidades */
+  font-size: 24px; /* Ajusta el tamaño del ícono según tus necesidades */
 }
 
 // ion-menu ion-item ion-label {

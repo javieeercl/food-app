@@ -69,13 +69,27 @@ constructor(private fdb: AngularFireDatabase) {
     const monthYear = moment().format('MMYYYY');
 
     // Include the month and year in the reference path
-    const histOrdersRef = ref(db, `histOrder/${userId}/historial/${monthYear}`);
+    const histOrdersRef = ref(db, `histOrder/${userId}/${monthYear}`);
 
     return push(histOrdersRef, order);
   }
 
+  createOrder() {
+    const db = this.fdb.database.ref();
 
-  createOrder(){
-    return this.fdb.list('orders').push(this.convertOrder());
+    // Get the current month and year
+    const monthYear = moment().format('MMYYYY');
+
+    // Include the month and year in the reference path
+    const orderRef = db.child(`orders/${monthYear}`);
+
+    // Generate a new unique ID for the order
+    const newOrderId = orderRef.push().key;
+
+    // Almacenar la orden en la referencia adecuada
+    return orderRef.child(newOrderId).set(this.convertOrder());
   }
+
+
+
 }

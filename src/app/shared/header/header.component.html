@@ -3,11 +3,17 @@
     <ion-toolbar traslucent color="light">
       <ion-item lines="none">
         <ion-icon name="arrow-back-outline" *ngIf="showInfoUser || showOrder || showReserva || showGarzon || showPerfil || showReporte"   (click)="back()"></ion-icon>
-        <ion-title>{{'label.menu' | translate}}</ion-title>
+        <ion-title><strong>{{'label.menu' | translate}}</strong></ion-title>
       </ion-item>
     </ion-toolbar>
   </ion-header>
   <ion-content>
+    <ion-item *ngIf="auth.isLogged" onclick="return false">
+      <ion-label>
+        <ion-text color="dark">Bienvenido</ion-text>
+        <p><ion-text color="dark"><strong>{{userEmail}}</strong></ion-text></p>
+      </ion-label>
+    </ion-item>
     <ng-container *ngIf="!showInfoUser && !showOrder && !showReserva && !showGarzon && !showPerfil && !showReporte">
       <ion-list>
         <ion-item (click)="auth.isLogged ? logout(): showPanelUser()">
@@ -25,20 +31,20 @@
           <ion-label>Reservar Mesa</ion-label>
         </ion-item>
           <ion-item (click)="goToSolicitarGarzon()">
-          <ion-icon slot="start" name="alarm-outline"></ion-icon>
+            <ion-icon name="hand-right-outline"></ion-icon>
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
-          <ion-label>Reservar Garzón</ion-label>
+          <ion-label>Solicitar Garzón</ion-label>
         </ion-item>
-        <ion-item (click)="goToReportes()">
+        <ion-item (click)="goToReportes()" *ngIf="userRol === 'admin'">
           <ion-icon slot="start" name="receipt-outline"></ion-icon>
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
           <ion-label>Reportes</ion-label>
         </ion-item>
          <ion-item (click)="goToPerfil()" *ngIf="auth.isLogged" >
-          <ion-icon slot="start" name="person-circle-outline"></ion-icon> 
+          <ion-icon slot="start" name="person-circle-outline"></ion-icon>
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
-          <ion-label>Perfil</ion-label> 
-       </ion-item> 
+          <ion-label>Perfil</ion-label>
+       </ion-item>
       </ion-list>
     </ng-container>
     <ng-container *ngIf="showInfoUser">

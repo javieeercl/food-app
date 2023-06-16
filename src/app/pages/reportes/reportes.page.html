@@ -1,27 +1,50 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Reportes de Órdenes
-    </ion-title>
+    <ion-title class="ion-text-center">Reportes de Órdenes</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-button expand="full" (click)="mostrarTablaCompras()" *ngIf="mostrarBoton">Mostrar Ventas</ion-button>
-  <ion-button expand="full" (click)="otroBoton()">Mostrar Reservas</ion-button>
+<ion-content class="ion-padding">
+  <div class="container">
+    <ion-card>
+      <ion-item>
+        <ion-label class="label">Mes:</ion-label>
+        <ion-select [multiple]="true"
+                    (ionChange)="handleChange($event)"
+                    [(ngModel)]="selectedMonth"
+                    okText="Seleccionar" cancelText="Cancelar"
+                    class="select">
+          <ion-select-option *ngFor="let month of months" [value]="month.value" class="option">{{ month.label }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label class="label">Año:</ion-label>
+        <ion-select [(ngModel)]="selectedYear" interface="alert" class="select">
+          <ion-select-option *ngFor="let year of years" [value]="year" class="option">{{ year }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-button expand="full" (click)="buscarOrdenes()" class="button">Buscar</ion-button>
 
-  <table *ngIf="mostrarTabla">
+    </ion-card>
+  </div>
+
+  <table *ngIf="mostrarTabla" class="table">
     <thead>
       <tr>
         <th>Usuario</th>
-        <th>Dirección</th>
+        <th>Fecha Pedido</th>
+        <th>Hora Pedido</th>
+        <th>$ Total Pedido</th>
+
         <!-- Agrega aquí los encabezados adicionales de la tabla -->
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let order of orders | async">
         <td>{{ order.user }}</td>
-        <td>{{ order.address }}</td>
+        <td>{{ order.date }}</td>
+        <td>{{ order.time }}</td>
+        <td>{{ order.priceOrder }}</td>
         <!-- Agrega aquí las celdas adicionales de la tabla -->
       </tr>
     </tbody>
