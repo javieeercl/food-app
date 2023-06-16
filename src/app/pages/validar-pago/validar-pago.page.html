@@ -1,0 +1,15 @@
+<ion-content>
+  <div class="card">
+    <ion-card class="centered-card">
+      <ion-card-header>
+        <ion-card-title>Validar Pago</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="content-area">
+        <div class="product-container" *ngFor="let product of getOrderProducts()">
+        {{ product.name }} - {{ product.quantity }}
+        </div>
+        <ion-button expand="full" (click)="validatePayment()">Validar Pago</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

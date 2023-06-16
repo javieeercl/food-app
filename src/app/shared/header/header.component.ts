@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   public showReserva: boolean;
   public showGarzon: boolean;
   public showPerfil: boolean;
+  public showValidar: boolean;
   public isLoggedIn: boolean = false;
   public showReporte: boolean = false;
   public userEmail: string;
@@ -36,6 +37,7 @@ export class HeaderComponent implements OnInit {
     this.showGarzon = false;
     this.showPerfil = false;
     this.showReporte = false;
+    this.showValidar = false;
     this.userEmail = '';
     this.userRol = '';
   }
@@ -91,6 +93,11 @@ export class HeaderComponent implements OnInit {
     this.menuCtrl.close('content');
   }
 
+  goToValidarPago() {
+    this.router.navigate(['/validar-pago']);
+    this.menuCtrl.close('content');
+  }
+
   ngOnInit() {
     this.cargarNombre();
 
@@ -129,6 +136,7 @@ export class HeaderComponent implements OnInit {
     this.showReserva = false;
     this.showGarzon = false;
     this.showReporte = false;
+    this.showValidar = false;
   }
 
   newAccount(){
@@ -156,6 +164,10 @@ export class HeaderComponent implements OnInit {
 
   showPanelReporte(){
     this.showReporte = true;
+  }
+
+  showPanelValidarPago(){
+    this.showValidar = true;
   }
 
   goToPay(){

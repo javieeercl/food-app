@@ -42,6 +42,10 @@ const routes: Routes = [
     path: 'reportes',
     loadChildren: () => import('./pages/reportes/reportes.module').then( m => m.ReportesPageModule)
   },
+  {
+    path: 'validar-pago',
+    loadChildren: () => import('./pages/validar-pago/validar-pago.module').then( m => m.ValidarPagoPageModule)
+  },
 
   
 
