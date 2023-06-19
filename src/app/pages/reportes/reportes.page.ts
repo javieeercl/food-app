@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Observable } from 'rxjs';
-import * as moment from 'moment';
 import { ToastController } from '@ionic/angular';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+import { toDataURL } from 'pdfmake/build/pdfmake';
+
+// Importa pdfMake y vfsFonts desde pdfmake/build
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 interface Order {
-
   id: string;
   priceOrder: string;
   date: string;
@@ -29,6 +34,8 @@ interface MonthOption {
   styleUrls: ['./reportes.page.scss'],
 })
 export class ReportesPage implements OnInit {
+  reportType: 'ventas' | 'reservas' | null = null;
+
   totalSales: number = 0;
   mesSeleccionado = undefined;
   orders: Observable<Order[]>;
@@ -52,13 +59,36 @@ export class ReportesPage implements OnInit {
   ];
   years: number[] = [];
 
+  logoUrl: SafeResourceUrl;
+  fechaReporte: string;
+  horaReporte: string;
+
   constructor(
     private fdb: AngularFireDatabase,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
     this.populateYears();
+    this.loadLogo();
+  }
+
+  async loadLogo() {
+    const response = await fetch('assets/img/logo_app.png');
+    const logoBlob = await response.blob();
+    const logoUrl = URL.createObjectURL(logoBlob);
+    this.logoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(logoUrl);
+  }
+
+  async selectVentasReport() {
+    this.reportType = 'ventas';
+    await this.presentToast('Seleccionaste el reporte de ventas. Por favor, selecciona el mes y el año.');
+  }
+
+  async selectReservasReport() {
+    this.reportType = 'reservas';
+    await this.presentToast('Seleccionaste el reporte de reservas. Por favor, selecciona el mes y el año.');
   }
 
   populateYears() {
@@ -69,84 +99,142 @@ export class ReportesPage implements OnInit {
   }
 
   async exportToPDF() {
-    // Crear una nueva instancia de jsPDF
-    const pdf = new jsPDF();
+    // Obtener la imagen como un archivo de datos (data URL)
+    const response = await fetch('assets/img/logo_app.png');
+    const logoDataUrl = await response.blob();
 
-    // Añadir el título del informe
-    pdf.setFontSize(18);
-    pdf.text('Reporte de Órdenes', 10, 10);
+    const reader = new FileReader();
+    const logoPromise = new Promise<string>((resolve, reject) => {
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(logoDataUrl);
+    });
 
-    // Añadir la fecha y hora de la generación del informe
-    const now = new Date();
-    pdf.setFontSize(11);
-    pdf.text('Generado el: ' + now.toLocaleString(), 10, 20);
+    const logoDataURL = await logoPromise;
 
-    // Convertir la tabla en un canvas usando html2canvas
-    const content = document.querySelector('table');
-    const canvas = await html2canvas(content, { scale: 1 });
-    const imgData = canvas.toDataURL('image/png');
+    // Crear un nuevo documento PDF
+    const docDefinition = {
+      content: [],
+      footer: (currentPage, pageCount) => {
+        return { text: `Página ${currentPage} de ${pageCount}`, alignment: 'center', fontSize: 10 };
+      },
+    };
+    // Añadir el encabezado (header) con la imagen y el texto
+    const header = {
+      columns: [
+        {
+          image: logoDataURL,
+          width: 50,
+          height: 50,
+        },
+        {
+          text: 'El Bajón del Rey',
+          fontSize: 16,
+          margin: [10, 10, 0, 0],
+        },
+      ],
+    };
+    docDefinition.content.push(header);
 
-    // Añadir la tabla al PDF
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 30, pdfWidth, pdfHeight);
+    // Agregar la fecha y hora del reporte
+    const fechaHoraReporte = {
+      text: [
+        { text: 'Fecha reporte: ' },
+        { text: this.fechaReporte, bold: true },
+        { text: '\nHora reporte: ' },
+        { text: this.horaReporte, bold: true },
+      ],
+      margin: [0, 10],
+    };
+    docDefinition.content.push(fechaHoraReporte);
 
-    // Añadir el total de ventas al final del informe
-    pdf.setFontSize(14);
-    pdf.text('Total de ventas: ' + this.totalSales.toFixed(2), 10, pdfHeight + 40);
+    // Obtener los datos de la tabla
+    const tableContent = [];
+    const tableHeaders = [];
+    const tableBody = [];
 
-    // Guardar el PDF
-    pdf.save('reporte_pedidos.pdf');
+    // Obtener los encabezados de la tabla
+    const tableHeadersElements = Array.from(document.querySelectorAll('#tablaDatos th'));
+    tableHeadersElements.forEach((header) => {
+      tableHeaders.push(header.textContent);
+    });
+
+    // Obtener los datos de la tabla
+    const tableBodyRows = Array.from(document.querySelectorAll('#tablaDatos tbody tr'));
+    tableBodyRows.forEach((row) => {
+      const rowData = [];
+      Array.from(row.querySelectorAll('td')).forEach((cell) => {
+        rowData.push(cell.textContent);
+      });
+      tableBody.push(rowData);
+    });
+
+    // Agregar los encabezados y los datos de la tabla al documento PDF
+    tableContent.push(tableHeaders);
+
+    // Completar las celdas faltantes en las filas con valores vacíos
+    const maxCells = Math.max(...tableBody.map((row) => row.length));
+    tableBody.forEach((row) => {
+      while (row.length < maxCells) {
+        row.push('');
+      }
+      tableContent.push(row);
+    });
+
+    docDefinition.content.push({ table: { body: tableContent }, margin: [0, 10] });
+
+    // Generar el documento PDF
+    pdfMake.createPdf(docDefinition).download('reporte_pedidos.pdf');
   }
 
-
-  async buscarOrdenes() {
+  async buscarData() {
     const ordersObservables: Observable<Order[]>[] = [];
     let emptyMonths = 0; // Contador de meses sin datos
     this.totalSales = 0;
 
     for (const month of this.selectedMonth) {
-        const formattedMonth = month.toString().padStart(2, '0');
-        const formattedYear = this.selectedYear.toString();
+      const formattedMonth = month.toString().padStart(2, '0');
+      const formattedYear = this.selectedYear.toString();
 
-        const collectionPath = `orders/${formattedMonth}${formattedYear}`;
-        const ordersRef = this.fdb.list<Order>(collectionPath);
+      const collectionPath = `orders/${formattedMonth}${formattedYear}`;
+      const ordersRef = this.fdb.list<Order>(collectionPath);
 
-        // Obtener un snapshot solo una vez para verificar si hay datos
-        const ordersSnapshot = await ordersRef.query.once('value');
-        if (!ordersSnapshot.exists()) {
-            emptyMonths += 1;
-        } else {
-            // Si hay datos, suma los totales de los pedidos a totalSales
-            ordersSnapshot.forEach(orderSnap => {
-                this.totalSales += Number(orderSnap.val().priceOrder);
-            });
-        }
+      // Obtener un snapshot solo una vez para verificar si hay datos
+      const ordersSnapshot = await ordersRef.query.once('value');
+      if (!ordersSnapshot.exists()) {
+        emptyMonths += 1;
+      } else {
+        // Si hay datos, suma los totales de los pedidos a totalSales
+        ordersSnapshot.forEach(orderSnap => {
+          this.totalSales += Number(orderSnap.val().priceOrder);
+        });
+      }
 
-        ordersObservables.push(ordersRef.valueChanges());
-    };
+      ordersObservables.push(ordersRef.valueChanges());
+    }
 
     // Si todos los meses seleccionados están vacíos, muestra un toast
     if (emptyMonths === this.selectedMonth.length) {
-        this.presentToast('No se encontraron registros para los meses y año seleccionados.');
+      this.presentToast('No se encontraron registros para los meses y año seleccionados.');
     } else {
-        this.presentToast('Registros filtrados.');
+      this.presentToast('Registros filtrados.');
     }
 
     this.orders = combineLatest(ordersObservables).pipe(
-        map(arr => arr.reduce((acc, cur) => acc.concat(cur)))
+      map(arr => arr.reduce((acc, cur) => acc.concat(cur)))
     );
 
     this.mostrarTabla = true;
     this.mostrarBoton = false;
-  }
 
+    // Obtener la fecha y hora actual
+    this.fechaReporte = new Date().toLocaleDateString();
+    this.horaReporte = new Date().toLocaleTimeString();
+  }
 
   handleChange(ev) {
     this.mesSeleccionado = ev.target.value;
     console.log(this.mesSeleccionado);
-
   }
 
   async presentToast(message: string) {
@@ -155,16 +243,5 @@ export class ReportesPage implements OnInit {
       duration: 3000,
     });
     toast.present();
-  }
-
-  otroBoton() {
-    // Aquí puedes implementar la lógica para el otro botón
-    console.log('Presionaste el otro botón');
-    this.mostrarBoton = true;
-  }
-
-  verDetalles(orderId: string) {
-    // Aquí puedes implementar la lógica para mostrar los detalles de la orden seleccionada
-    console.log('Ver detalles de la orden con ID:', orderId);
   }
 }

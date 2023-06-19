@@ -1,0 +1,65 @@
+<ion-content class="ion-padding">
+  <ion-title class="custom-title">Reportes de Órdenes</ion-title>
+
+  <div class="container">
+    <ion-card>
+      <ion-item lines="none">
+        <ion-label class="label">Mes:</ion-label>
+        <ion-select [multiple]="true"
+                    (ionChange)="handleChange($event)"
+                    [(ngModel)]="selectedMonth"
+                    okText="Seleccionar" cancelText="Cancelar"
+                    class="select">
+          <ion-select-option *ngFor="let month of months" [value]="month.value" class="option">{{ month.label }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label class="label">Año:</ion-label>
+        <ion-select [(ngModel)]="selectedYear" interface="alert" class="select">
+          <ion-select-option *ngFor="let year of years" [value]="year" class="option">{{ year }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-button expand="full" (click)="buscarOrdenes()" class="button">Buscar</ion-button>
+
+    </ion-card>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <table *ngIf="mostrarTabla && (orders | async)?.length > 0" class="table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Fecha Pedido</th>
+              <th>Hora Pedido</th>
+              <th>$ Total Pedido</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders | async">
+              <td>{{ order.user }}</td>
+              <td>{{ order.date }}</td>
+              <td>{{ order.time }}</td>
+              <td>{{ order.priceOrder }}</td>
+            </tr>
+            <tr>
+              <td colspan="3">Total Ventas</td>
+              <td>{{ totalSales | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-button expand="full"
+  (click)="exportToPDF()"
+  class="button button-export"
+  [disabled]="!selectedMonth || !selectedYear || !(orders | async)?.length">
+  Exportar a PDF
+</ion-button>
+
+
+
+</ion-content>

@@ -11,14 +11,14 @@ export class ReservaService {
   constructor(private fdb: AngularFireDatabase) {
 
   }
-  createHistReserva(mesaData:string, userId: string) {
+  createHistReserva(mesaData:string) {
     const db = getDatabase();
 
     // Get the current month and year
     const monthYear = moment().format('MMYYYY');
 
     // Include the month and year in the reference path
-    const histReservaRef = ref(db, `histReserva/${userId}/${monthYear}`);
+    const histReservaRef = ref(db, `histReserva/${monthYear}`);
 
     return push(histReservaRef, mesaData);
   }

@@ -25,22 +25,22 @@
           <ion-label>{{'label.see.order'| translate}}</ion-label>
           <ion-badge slot="end">{{orderService.numProducts()}}</ion-badge>
         </ion-item>
-        <ion-item (click)="goToReservarMesa()" *ngIf="userRol === 'usuario'">
+        <ion-item (click)="goToReservarMesa()" *ngIf="auth.isLogged">
           <ion-icon slot="start" name="calendar-number-outline"></ion-icon>
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
           <ion-label>Reservar Mesa</ion-label>
         </ion-item>
-        <ion-item (click)="goToValidarPago()" *ngIf="userRol === 'garzon'">
+        <ion-item (click)="goToValidarPago()" *ngIf="auth.isLogged">
           <ion-icon name="shield-checkmark-outline"></ion-icon>
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
           <ion-label>Validar Pago</ion-label>
         </ion-item>
-          <ion-item (click)="goToSolicitarGarzon()" *ngIf="userRol === 'usuario'">
+          <ion-item (click)="goToSolicitarGarzon()" *ngIf="auth.isLogged">
             <ion-icon name="hand-right-outline"></ion-icon>
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
           <ion-label>Solicitar Garzón</ion-label>
         </ion-item>
-        <ion-item (click)="goToReportes()" *ngIf="userRol === 'admin'">
+        <ion-item (click)="goToReportes()" *ngIf="userRol === 'admin' && auth.isLogged">
           <ion-icon slot="start" name="receipt-outline"></ion-icon>
           <!-- <ion-label>{{'label.see.order'| translate}}</ion-label> -->
           <ion-label>Reportes</ion-label>

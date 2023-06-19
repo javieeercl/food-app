@@ -175,7 +175,7 @@ updateHorasAfterMesaSelection() {
       this.auth.currentUser().then(user => {
         this.userService.getAddressUser(user.email).subscribe((users) => {
           console.log(users[0].email);
-          this.reservaService.createHistReserva(mesaData, userId).then(data => {
+          this.reservaService.createHistReserva(mesaData).then(data => {
             console.log("Se ha creado el objeto ", data);
           }).catch(e => {
             console.error("Ha habido un error " + e);

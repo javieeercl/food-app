@@ -1,7 +1,14 @@
 <ion-content class="ion-padding">
-  <ion-title class="custom-title">Reportes de Órdenes</ion-title>
+  <ion-title class="custom-title">Reportes</ion-title>
 
   <div class="container">
+    <ion-card>
+      <ion-button expand="full" (click)="selectVentasReport()" class="button">Reporte Ventas</ion-button>
+      <ion-button expand="full" (click)="selectReservasReport()" class="button">Reporte Reservas</ion-button>
+    </ion-card>
+  </div>
+
+  <div class="container" *ngIf="reportType">
     <ion-card>
       <ion-item lines="none">
         <ion-label class="label">Mes:</ion-label>
@@ -19,47 +26,43 @@
           <ion-select-option *ngFor="let year of years" [value]="year" class="option">{{ year }}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-button expand="full" (click)="buscarOrdenes()" class="button">Buscar</ion-button>
+      <ion-button expand="full" (click)="buscarData()" class="button">Buscar</ion-button>
 
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <table *ngIf="mostrarTabla && (orders | async)?.length > 0" class="table" id="tablaDatos">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Fecha Pedido</th>
+                  <th>Hora Pedido</th>
+                  <th>$ Total Pedido</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of orders | async">
+                  <td>{{ order.user }}</td>
+                  <td>{{ order.date }}</td>
+                  <td>{{ order.time }}</td>
+                  <td>{{ order.priceOrder }}</td>
+                </tr>
+                <tr>
+                  <td colspan="3">Total Ventas</td>
+                  <td>{{ totalSales | currency}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card>
   </div>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12">
-        <table *ngIf="mostrarTabla && (orders | async)?.length > 0" class="table">
-          <thead>
-            <tr>
-              <th>Usuario</th>
-              <th>Fecha Pedido</th>
-              <th>Hora Pedido</th>
-              <th>$ Total Pedido</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let order of orders | async">
-              <td>{{ order.user }}</td>
-              <td>{{ order.date }}</td>
-              <td>{{ order.time }}</td>
-              <td>{{ order.priceOrder }}</td>
-            </tr>
-            <tr>
-              <td colspan="3">Total Ventas</td>
-              <td>{{ totalSales | currency}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
   <ion-button expand="full"
-  (click)="exportToPDF()"
-  class="button button-export"
-  [disabled]="!selectedMonth || !selectedYear || !(orders | async)?.length">
-  Exportar a PDF
-</ion-button>
-
-
-
+              (click)="exportToPDF()"
+              class="button button-export"
+              [disabled]="!selectedMonth || !selectedYear || !(orders | async)?.length">
+    Exportar a PDF
+  </ion-button>
 </ion-content>

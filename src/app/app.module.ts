@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -16,6 +16,7 @@ import { SharedModule } from './shared/shared.module';
 // import { PayPal } from '@ionic-native/paypal/ngx';
 import * as firebase from 'firebase/app';
 import 'firebase/functions';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 export function HttpLoaderFactory(http: HttpClient){
@@ -37,7 +38,13 @@ export function HttpLoaderFactory(http: HttpClient){
                 deps: [HttpClient]
               }
             }),
-            AngularFireModule.initializeApp(environment.firebase)
+            AngularFireModule.initializeApp(environment.firebase),
+            ServiceWorkerModule.register('ngsw-worker.js', {
+              enabled: !isDevMode(),
+              // Register the ServiceWorker as soon as the application is stable
+              // or after 30 seconds (whichever comes first).
+              registrationStrategy: 'registerWhenStable:30000'
+            })
           ],
   providers: [
     Globalization,

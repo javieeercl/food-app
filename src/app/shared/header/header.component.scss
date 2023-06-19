@@ -1,5 +1,5 @@
 .logo {
-  height: 60px;
+  height: 55px;
   padding: 3px;
 }
 
@@ -28,4 +28,9 @@ ion-menu ion-item ion-icon {
 ion-menu ion-item ion-badge {
   margin-left: auto;
 }
-
+ion-menu ion-header  {
+  height: 50px; /* Ajusta la altura del encabezado del menú según tus necesidades */
+}
+ion-toolbar{
+  height: 55px;
+}
